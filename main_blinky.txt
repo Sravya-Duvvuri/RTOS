@@ -1,0 +1,33 @@
+#include "FreeRTOS.h"
+#include "task.h"
+#include <stdio.h>
+
+// Task 1 prints every 1 second
+void vTask1(void* pvParameters)
+{
+    for (;;)
+    {
+        printf("Task 1 is running\n");
+        vTaskDelay(pdMS_TO_TICKS(1000)); // wait 1000 ms
+    }
+}
+
+// Task 2 prints every 0.5 seconds
+void vTask2(void* pvParameters)
+{
+    for (;;)
+    {
+        printf("Task 2 is running\n");
+        vTaskDelay(pdMS_TO_TICKS(500)); // wait 500 ms
+    }
+}
+
+void main_blinky(void)
+{
+    xTaskCreate(vTask1, "Task 1", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+    xTaskCreate(vTask2, "Task 2", configMINIMAL_STACK_SIZE, NULL, 2, NULL); // higher priority
+
+    vTaskStartScheduler();
+
+    for (;;); // should never get here
+}
